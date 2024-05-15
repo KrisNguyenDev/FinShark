@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FinShark.Data;
 using FinShark.Dtos.Stock;
+using FinShark.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ namespace FinShark.Controllers
                 return Problem(statusCode: StatusCodes.Status404NotFound, title: "Stock not found.");
             }
 
-            return Ok(stock);
+            return Ok(_mapper.Map<StockDto>(stock));
         }
 
         [HttpDelete("{id}")]
@@ -52,6 +53,17 @@ namespace FinShark.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateStockDto request)
+        {
+            Stock stock = _mapper.Map<Stock>(request);
+
+            await _context.Stock.AddAsync(stock);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
         }
     }
 }

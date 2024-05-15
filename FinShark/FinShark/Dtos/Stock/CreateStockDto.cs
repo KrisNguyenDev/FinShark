@@ -2,7 +2,7 @@
 
 namespace FinShark.Dtos.Stock
 {
-    public class StockDto : IMapFrom<Model.Stock>
+    public class CreateStockDto : IMapFrom<Model.Stock>
     {
         public int Id { get; set; }
         public string Symbol { get; set; } = string.Empty;
