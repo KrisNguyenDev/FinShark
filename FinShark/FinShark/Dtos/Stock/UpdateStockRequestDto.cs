@@ -1,8 +1,6 @@
-﻿using FinShark.Mappings;
-
-namespace FinShark.Dtos.Stock
+﻿namespace FinShark.Dtos.Stock
 {
-    public class CreateStockDto : IMapFrom<Model.Stock>
+    public class UpdateStockRequestDto
     {
         public int Id { get; set; }
         public string Symbol { get; set; } = string.Empty;

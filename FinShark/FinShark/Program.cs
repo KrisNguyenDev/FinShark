@@ -1,4 +1,6 @@
 using FinShark.Data;
+using FinShark.Interfaces;
+using FinShark.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -21,6 +23,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 // Way 2:
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Add service
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
