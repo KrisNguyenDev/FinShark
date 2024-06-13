@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Add service
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 

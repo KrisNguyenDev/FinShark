@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Comment\" />
+    <Folder Include="Dtos\Common\" />
   </ItemGroup>
 
 </Project>

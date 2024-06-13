@@ -46,9 +46,7 @@ namespace FinShark.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await _context.Stock
-                .Where(x => x.Id == id)
-                .ExecuteDeleteAsync();
+            var result = await _stockRepository.DeleteAsync(id);
 
             if (result == 0)
             {
@@ -59,7 +57,7 @@ namespace FinShark.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateStockRequestDto request)
+        public async Task<IActionResult> Create([FromBody] CreateStockRequest request)
         {
             Stock stock = new Stock
             {
@@ -77,7 +75,7 @@ namespace FinShark.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto request)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequest request)
         {
             var stock = await _context.Stock.FirstOrDefaultAsync(x=>x.Id == id);
 
