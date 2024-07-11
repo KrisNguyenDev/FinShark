@@ -33,20 +33,20 @@ namespace FinShark.Repository
 
         public async Task<List<Stock>> GetAllAsync()
         {
-            var stocks = await _context.Stock.ToListAsync();
+            var stocks = await _context.Stock.Include(x => x.Comments).ToListAsync();
             return stocks;
         }
 
         public async Task<Stock> GetByIdAsync(int id)
         {
-            var stock = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+            var stock = await _context.Stock.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
             return stock;
         }
 
         public async Task<int> UpdateAsync(int id, Stock stock)
         {
             var result = await _context.Stock
-                .Where (x => x.Id == id)
+                .Where(x => x.Id == id)
                 .ExecuteUpdateAsync(setter => setter
                 .SetProperty(x => x.Symbol, stock.Symbol)
                 .SetProperty(x => x.CompanyName, stock.CompanyName)
@@ -56,5 +56,6 @@ namespace FinShark.Repository
                 );
             return result;
         }
+
     }
 }

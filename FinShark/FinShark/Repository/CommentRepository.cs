@@ -13,6 +13,7 @@ namespace FinShark.Repository
         {
             _context = context;
         }
+
         public async Task<Comment> CreateAsync(Comment comment)
         {
             await _context.Comment.AddAsync(comment);

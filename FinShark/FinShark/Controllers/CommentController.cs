@@ -15,12 +15,14 @@ namespace FinShark.Controllers
     {
         private readonly ApplicationDBContext _context;
         private readonly ICommentRepository _commentRepository;
+        private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
 
-        public CommentController(ApplicationDBContext context, ICommentRepository commentRepository, IMapper mapper)
+        public CommentController(ApplicationDBContext context, ICommentRepository commentRepository, IStockRepository stockRepository, IMapper mapper)
         {
             _context = context;
             _commentRepository = commentRepository;
+            _stockRepository = stockRepository;
             _mapper = mapper;
         }
 
@@ -48,6 +50,13 @@ namespace FinShark.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommentRequest request)
         {
+            Stock stock = await _stockRepository.GetByIdAsync(request.StockId);
+
+            if(stock is null)
+            {
+                return BadRequest("Stock does not exists.");
+            }
+
             Comment comment = new Comment
             {
                 Content = request.Content,
