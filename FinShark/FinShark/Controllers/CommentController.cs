@@ -34,12 +34,12 @@ namespace FinShark.Controllers
             return Ok(_mapper.Map<List<CommentDto>>(comments));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
 
-            if(comment == null)
+            if (comment == null)
             {
                 return BadRequest("Comment not found.");
             }
@@ -47,12 +47,12 @@ namespace FinShark.Controllers
             return Ok(_mapper.Map<CommentDto>(comment));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCommentRequest request)
+        [HttpPost("{stockId:int}")]
+        public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentRequest request)
         {
-            Stock stock = await _stockRepository.GetByIdAsync(request.StockId);
+            Stock stock = await _stockRepository.GetByIdAsync(stockId);
 
-            if(stock is null)
+            if (stock is null)
             {
                 return BadRequest("Stock does not exists.");
             }
@@ -69,12 +69,12 @@ namespace FinShark.Controllers
             return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _commentRepository.DeleteAsync(id);
 
-            if(result == 0)
+            if (result == 0)
             {
                 return BadRequest("Comment not found.");
             }
@@ -82,10 +82,10 @@ namespace FinShark.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequest request)
         {
-            if(id != request.Id)
+            if (id != request.Id)
             {
                 return BadRequest("Comment not found.");
             }
