@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FinShark.Data;
 using FinShark.Dtos.Stock;
+using FinShark.Helper;
 using FinShark.Interfaces;
 using FinShark.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace FinShark.Controllers
         private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
 
-        public StockController(ApplicationDBContext context,IStockRepository stockRepository, IMapper mapper)
+        public StockController(ApplicationDBContext context, IStockRepository stockRepository, IMapper mapper)
         {
             _context = context;
             _stockRepository = stockRepository;
@@ -24,13 +25,14 @@ namespace FinShark.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
         {
-            var stocks = await _stockRepository.GetAllAsync();
+            var stocks = await _stockRepository.GetAllAsync(queryObject);
+
             return Ok(_mapper.Map<List<StockDto>>(stocks));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var stock = await _stockRepository.GetByIdAsync(id);
@@ -43,7 +45,7 @@ namespace FinShark.Controllers
             return Ok(_mapper.Map<StockDto>(stock));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _stockRepository.DeleteAsync(id);
@@ -74,12 +76,12 @@ namespace FinShark.Controllers
             return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequest request)
         {
-            var stock = await _context.Stock.FirstOrDefaultAsync(x=>x.Id == id);
+            var stock = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(stock == null)
+            if (stock == null)
             {
                 return NotFound();
             }
@@ -88,11 +90,11 @@ namespace FinShark.Controllers
             {
                 Id = stock.Id,
                 Symbol = request.Symbol,
-                CompanyName =request.CompanyName,
+                CompanyName = request.CompanyName,
                 Industry = request.Industry,
                 LastDiv = request.LastDiv,
                 MarketCap = request.MarketCap,
-                Purchase= request.Purchase,
+                Purchase = request.Purchase,
             };
 
             await _stockRepository.UpdateAsync(id, stockEntity);
