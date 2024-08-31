@@ -4,10 +4,11 @@ namespace FinShark.Dtos.Account
 {
     public class RegisterDto
     {
-        public required string UserName { get; set; }
+        [Required]
+        public string? UserName { get; set; }
         [EmailAddress] 
-        public required string Email { get; set;}
+        public string? Email { get; set;}
         [Required] 
-        public required string Password { get; set; }
+        public string? Password { get; set; }
     }
 }
