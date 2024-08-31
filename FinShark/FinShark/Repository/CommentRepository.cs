@@ -37,7 +37,8 @@ namespace FinShark.Repository
 
         public async Task<Comment> GetByIdAsync(int id)
         {
-            return await _context.Comment.FirstOrDefaultAsync(x => x.Id == id);
+            var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == id);
+            return comment ?? new Comment(); // Return a default Comment if comment is null
         }
 
         public async Task<int> UpdateAsync(int id, Comment comment)
