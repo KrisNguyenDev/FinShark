@@ -65,7 +65,7 @@ namespace FinShark.Repository
         public async Task<Stock> GetByIdAsync(int id)
         {
             var stock = await _context.Stock.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
-            return stock;
+            return stock ?? new Stock();
         }
 
         public async Task<int> UpdateAsync(int id, Stock stock)

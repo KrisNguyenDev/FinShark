@@ -45,7 +45,7 @@ namespace FinShark.Controllers
                     {
                         return Ok(new NewUserDto
                         {
-                            Email = appUser.Email,
+                            Email = appUser.Email ,
                             UserName = appUser.UserName,
                             Token = _tokenServices.CreateToken(appUser)
                         });
